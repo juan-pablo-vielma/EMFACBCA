@@ -1,0 +1,783 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     28511,        775]
+NotebookOptionsPosition[     27910,        749]
+NotebookOutlinePosition[     28266,        765]
+CellTagsIndexPosition[     28223,        762]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ConfidencePlotA", "[", 
+    RowBox[{"method_", ",", "color_", ",", "data_", ",", "dashing_"}], "]"}], 
+   ":=", 
+   RowBox[{"ListPlot", "[", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"data", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", 
+          RowBox[{"2", ";;"}]}], "]"}], "]"}], ",", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"method", "\[Equal]", "#"}], "&"}], ",", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}]}], "]"}], ",", "True"}], 
+      "]"}], ",", 
+     RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+     RowBox[{"InterpolationOrder", "\[Rule]", "2"}], ",", 
+     RowBox[{"Filling", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"1", "\[Rule]", 
+         RowBox[{"{", "2", "}"}]}], ",", 
+        RowBox[{"3", "\[Rule]", 
+         RowBox[{"{", "2", "}"}]}]}], "}"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Directive", "[", 
+         RowBox[{"color", ",", "dashing"}], "]"}], ",", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"color", ",", "dashing"}], "]"}], ",", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"color", ",", "dashing"}], "]"}]}], "}"}]}], ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Full", ",", "Automatic"}], "}"}]}], ",", 
+     RowBox[{"FillingStyle", "\[Rule]", 
+      RowBox[{"Opacity", "[", "0.05", "]"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ConfidencePlotB", "[", 
+    RowBox[{
+    "method_", ",", "color_", ",", "marker_", ",", "size_", ",", "data_"}], 
+    "]"}], ":=", 
+   RowBox[{"ListPlot", "[", 
+    RowBox[{
+     RowBox[{"Pick", "[", 
+      RowBox[{
+       RowBox[{"data", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", 
+          RowBox[{"2", ";;"}]}], "]"}], "]"}], ",", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"method", "\[Equal]", "#"}], "&"}], ",", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}]}], "]"}], ",", "True"}], 
+      "]"}], ",", 
+     RowBox[{"InterpolationOrder", "\[Rule]", "2"}], ",", 
+     RowBox[{"PlotMarkers", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\"\<1\>\"", ",", "2"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"marker", ",", "size"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"\"\<1\>\"", ",", "2"}], "}"}]}], "}"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Directive", "[", 
+         RowBox[{"Thin", ",", "color", ",", "Transparent"}], "]"}], ",", 
+        RowBox[{"Directive", "[", "color", "]"}], ",", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Thin", ",", "color", ",", "Transparent"}], "]"}]}], "}"}]}],
+      ",", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"Full", ",", "Automatic"}], "}"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ConfidencePlot", "[", 
+    RowBox[{
+    "data_", ",", "methodlabel_", ",", "method_", ",", "color_", ",", 
+     "marker_", ",", "size_", ",", "dashing_"}], "]"}], ":=", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ConfidencePlotA", "[", 
+      RowBox[{"method", ",", "color", ",", "data", ",", "dashing"}], "]"}], 
+     ",", 
+     RowBox[{"ConfidencePlotB", "[", 
+      RowBox[{
+      "method", ",", "color", ",", "marker", ",", "size", ",", "data"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ConfidencePlotAll", "[", 
+    RowBox[{"mcm_", ",", "file_", ",", "title_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "data", "}"}], ",", 
+     RowBox[{
+      RowBox[{"data", "=", 
+       RowBox[{"Import", "[", 
+        RowBox[{"FileNameJoin", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+           "\"\<results/csv\>\"", ",", "file"}], "}"}], "]"}], "]"}]}], ";", 
+      RowBox[{"Show", "[", 
+       RowBox[{
+        RowBox[{"Apply", "[", 
+         RowBox[{"ConfidencePlot", ",", 
+          RowBox[{"Flatten", "[", 
+           RowBox[{
+            RowBox[{"Outer", "[", 
+             RowBox[{"Join", ",", 
+              RowBox[{"{", 
+               RowBox[{"{", "data", "}"}], "}"}], ",", "mcm", ",", "1"}], 
+             "]"}], ",", "1"}], "]"}], ",", 
+          RowBox[{"{", "1", "}"}]}], "]"}], ",", 
+        RowBox[{"PlotRange", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Automatic", ",", "Automatic"}], "}"}]}], ",", 
+        RowBox[{"AxesOrigin", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]}], ",", 
+        RowBox[{"Ticks", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"1", ",", "0"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"3", ",", "2"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"4", ",", "3"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"5", ",", "4"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"6", ",", "5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"7", ",", "6"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"8", ",", "7"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"9", ",", "8"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"10", ",", "9"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"11", ",", "10"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"12", ",", "11"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"13", ",", "12"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"14", ",", "13"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"15", ",", "14"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"16", ",", "15"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"17", ",", "16"}], "}"}]}], "}"}], ",", "Automatic"}], 
+          "}"}]}], ",", 
+        RowBox[{"TicksStyle", "\[Rule]", "15"}], ",", 
+        RowBox[{"PlotLabel", "\[Rule]", 
+         RowBox[{"Style", "[", 
+          RowBox[{"title", ",", 
+           RowBox[{"FontSize", "\[Rule]", "20"}]}], "]"}]}]}], "]"}]}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeplot", "[", 
+    RowBox[{"mcm_", ",", "basename_", ",", "conf_", ",", "metric_"}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"metric", "[", 
+     RowBox[{"[", "1", "]"}], "]"}], "@@", 
+    RowBox[{"{", 
+     RowBox[{"mcm", ",", 
+      RowBox[{"basename", "<>", "\"\<.dat_timeplot_\>\"", "<>", 
+       RowBox[{"metric", "[", 
+        RowBox[{"[", "2", "]"}], "]"}], "<>", "\"\<_\>\"", "<>", "conf", 
+       "<>", "\"\<.csv\>\""}], ",", 
+      RowBox[{"metric", "[", 
+       RowBox[{"[", "3", "]"}], "]"}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeplotcomb", "[", "comb_", "]"}], ":=", 
+   RowBox[{"makeplot", "[", 
+    RowBox[{
+     RowBox[{"comb", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ",", 
+     RowBox[{"comb", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"comb", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", 
+     RowBox[{"comb", "[", 
+      RowBox[{"[", 
+       RowBox[{"4", ";;", "6"}], "]"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"makeallcomb", "[", 
+    RowBox[{"mcm_", ",", "combs_", ",", "columns_"}], "]"}], ":=", 
+   RowBox[{"GraphicsColumn", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"GraphicsGrid", "[", 
+        RowBox[{"Partition", "[", 
+         RowBox[{
+          RowBox[{"Flatten", "[", 
+           RowBox[{"Map", "[", 
+            RowBox[{"makeplotcomb", ",", "combs"}], "]"}], "]"}], ",", 
+          RowBox[{"UpTo", "[", "columns", "]"}]}], "]"}], "]"}], ",", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{
+         RowBox[{"Inset", "[", 
+          RowBox[{
+           RowBox[{"PointLegend", "[", 
+            RowBox[{
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{"mcm", "[", 
+                RowBox[{"[", 
+                 RowBox[{"i", ",", "3"}], "]"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "1", ",", 
+                 RowBox[{"Length", "[", "mcm", "]"}]}], "}"}]}], "]"}], ",", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{"mcm", "[", 
+                RowBox[{"[", 
+                 RowBox[{"i", ",", "1"}], "]"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", "1", ",", 
+                 RowBox[{"Length", "[", "mcm", "]"}]}], "}"}]}], "]"}], ",", 
+             RowBox[{"LabelStyle", "\[Rule]", "20"}], ",", 
+             RowBox[{"LegendMarkers", "\[Rule]", 
+              RowBox[{"Table", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"mcm", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"i", ",", "4"}], "]"}], "]"}], ",", "25"}], "}"}],
+                 ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", "1", ",", 
+                  RowBox[{"Length", "[", "mcm", "]"}]}], "}"}]}], "]"}]}], 
+             ",", 
+             RowBox[{"LegendLayout", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"\"\<Row\>\"", ",", "1"}], "}"}]}]}], "]"}], ",", 
+           "Top", ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}]}], "]"}], ",", 
+         RowBox[{"AspectRatio", "\[Rule]", 
+          RowBox[{"1", "/", "20"}]}]}], "]"}]}], "}"}], ",", "Center", ",", 
+     RowBox[{"-", "80"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "1500"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"exportallcomb", "[", 
+    RowBox[{"mcm_", ",", "combs_", ",", "name_", ",", "columns_"}], "]"}], ":=", 
+   RowBox[{"Export", "[", 
+    RowBox[{
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<pdf\>\"", ",", 
+        RowBox[{"name", "<>", "\"\<.pdf\>\""}]}], "}"}], "]"}], ",", 
+     RowBox[{"makeallcomb", "[", 
+      RowBox[{"mcm", ",", "combs", ",", "columns"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"firstclassgraph", "[", 
+    RowBox[{"mcm_", ",", "basename_", ",", "metrics_", ",", "columns_"}], 
+    "]"}], ":=", 
+   RowBox[{"exportallcomb", "[", 
+    RowBox[{"mcm", ",", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"Outer", "[", 
+        RowBox[{"Join", ",", 
+         RowBox[{"{", 
+          RowBox[{"{", 
+           RowBox[{"basename", ",", "mcm", ",", 
+            RowBox[{"metrics", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "}"}], ",", 
+         RowBox[{"metrics", "[", 
+          RowBox[{"[", "3", "]"}], "]"}], ",", "1"}], "]"}], ",", "1"}], 
+      "]"}], ",", 
+     RowBox[{"basename", "<>", "\"\<_\>\"", "<>", 
+      RowBox[{"metrics", "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}], ",", "columns"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"fourgraph", "[", 
+    RowBox[{"mcm_", ",", "combs_", ",", "name_", ",", "estimator_"}], "]"}], ":=", 
+   RowBox[{"Export", "[", 
+    RowBox[{
+     RowBox[{"FileNameJoin", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<pdf\>\"", ",", 
+        RowBox[{"name", "<>", "estimator", "<>", "\"\<.pdf\>\""}]}], "}"}], 
+      "]"}], ",", 
+     RowBox[{"makeallcomb", "[", 
+      RowBox[{"mcm", ",", "combs", ",", "2"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.710877464976693*^9, 3.710877533727857*^9}, {
+   3.710877589243086*^9, 3.710877611824106*^9}, {3.7108780396144047`*^9, 
+   3.710878059828849*^9}, {3.7110420701632423`*^9, 3.711042140091042*^9}, {
+   3.711042191627112*^9, 3.7110422220258904`*^9}, {3.7110425925583143`*^9, 
+   3.711042601326339*^9}, 3.7110427718695097`*^9, {3.718218029243586*^9, 
+   3.718218029805394*^9}, 3.718832656651001*^9, 3.718833911159874*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Paper Plots", "Chapter",
+ CellChangeTimes->{
+  3.710877472368536*^9, {3.718218045632535*^9, 3.71821805390653*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"markersize", "=", "20"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"basemethods", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Probabilistic Polyhedral\>\"", ",", 
+       "\"\<estimateProbPoly_updateNull_initializeEllipsoid_questionMaxMin\>\"\
+", ",", 
+       InterpretationBox[
+        ButtonBox[
+         TooltipBox[
+          GraphicsBox[{
+            {GrayLevel[0], RectangleBox[{0, 0}]}, 
+            {GrayLevel[0], RectangleBox[{1, -1}]}, 
+            {RGBColor[
+              Rational[22, 255], 0, 
+              Rational[121, 255]], RectangleBox[{0, -1}, {2, 1}]}},
+           AspectRatio->1,
+           Frame->True,
+           FrameStyle->RGBColor[0.05751633986928104, 0., 0.31633986928104574`],
+           FrameTicks->None,
+           
+           ImageSize->
+            Dynamic[{
+             Automatic, 
+              1.35 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+               Magnification])}],
+           PlotRangePadding->None],
+          "RGBColor[22/255, 0, 121/255]"],
+         Appearance->None,
+         BaseStyle->{},
+         BaselinePosition->Baseline,
+         ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+           If[
+            Not[
+             AbsoluteCurrentValue["Deployed"]], 
+            SelectionMove[Typeset`box$, All, Expression]; 
+            FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+            FrontEnd`Private`$ColorSelectorInitialColor = RGBColor[
+               Rational[22, 255], 0, 
+               Rational[121, 255]]; 
+            FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+            MathLink`CallFrontEnd[
+              FrontEnd`AttachCell[Typeset`box$, 
+               FrontEndResource["RGBColorValueSelector"], {
+               0, {Left, Bottom}}, {Left, Top}, 
+               "ClosingActions" -> {
+                "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+         DefaultBaseStyle->{},
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        RGBColor[
+         Rational[22, 255], 0, 
+         Rational[121, 255]],
+        Editable->False,
+        Selectable->False], ",", "\"\<\[FilledUpTriangle]\>\"", ",", 
+       "markersize", ",", 
+       RowBox[{"Dashing", "[", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "Small"}], "}"}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Robust\>\"", ",", 
+       "\"\<estimateAnalyticCenterRobust_updateNull_initializeEllipsoid_\
+questionNormalizedCenterMIP\>\"", ",", 
+       InterpretationBox[
+        ButtonBox[
+         TooltipBox[
+          GraphicsBox[{
+            {GrayLevel[0], RectangleBox[{0, 0}]}, 
+            {GrayLevel[0], RectangleBox[{1, -1}]}, 
+            {RGBColor[
+              Rational[6, 17], 
+              Rational[43, 85], 
+              Rational[142, 255]], RectangleBox[{0, -1}, {2, 1}]}},
+           AspectRatio->1,
+           Frame->True,
+           
+           FrameStyle->RGBColor[
+            0.23529411764705882`, 0.33725490196078434`, 0.3712418300653595],
+           FrameTicks->None,
+           
+           ImageSize->
+            Dynamic[{
+             Automatic, 
+              1.35 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+               Magnification])}],
+           PlotRangePadding->None],
+          "RGBColor[6/17, 43/85, 142/255]"],
+         Appearance->None,
+         BaseStyle->{},
+         BaselinePosition->Baseline,
+         ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+           If[
+            Not[
+             AbsoluteCurrentValue["Deployed"]], 
+            SelectionMove[Typeset`box$, All, Expression]; 
+            FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+            FrontEnd`Private`$ColorSelectorInitialColor = RGBColor[
+               Rational[6, 17], 
+               Rational[43, 85], 
+               Rational[142, 255]]; 
+            FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+            MathLink`CallFrontEnd[
+              FrontEnd`AttachCell[Typeset`box$, 
+               FrontEndResource["RGBColorValueSelector"], {
+               0, {Left, Bottom}}, {Left, Top}, 
+               "ClosingActions" -> {
+                "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+         DefaultBaseStyle->{},
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        RGBColor[
+         Rational[6, 17], 
+         Rational[43, 85], 
+         Rational[142, 255]],
+        Editable->False,
+        Selectable->False], ",", "\"\<\[FilledSquare]\>\"", ",", "markersize",
+        ",", 
+       RowBox[{"Dashing", "[", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "Small"}], "}"}], "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Ellipsoidal\>\"", ",", 
+       "\"\<estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_\
+questionDEffPWL_effDim\>\"", ",", 
+       InterpretationBox[
+        ButtonBox[
+         TooltipBox[
+          GraphicsBox[{
+            {GrayLevel[0], RectangleBox[{0, 0}]}, 
+            {GrayLevel[0], RectangleBox[{1, -1}]}, 
+            {RGBColor[
+             0.8964705882352941, 0.7482352941176471, 0.5435294117647058], 
+             RectangleBox[{0, -1}, {2, 1}]}},
+           AspectRatio->1,
+           Frame->True,
+           
+           FrameStyle->RGBColor[
+            0.5976470588235294, 0.4988235294117648, 0.36235294117647054`],
+           FrameTicks->None,
+           
+           ImageSize->
+            Dynamic[{
+             Automatic, 
+              1.35 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+               Magnification])}],
+           PlotRangePadding->None],
+          
+          "RGBColor[0.8964705882352941, 0.7482352941176471, \
+0.5435294117647058]"],
+         Appearance->None,
+         BaseStyle->{},
+         BaselinePosition->Baseline,
+         ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+           If[
+            Not[
+             AbsoluteCurrentValue["Deployed"]], 
+            SelectionMove[Typeset`box$, All, Expression]; 
+            FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+            FrontEnd`Private`$ColorSelectorInitialColor = 
+             RGBColor[
+              0.8964705882352941, 0.7482352941176471, 0.5435294117647058]; 
+            FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+            MathLink`CallFrontEnd[
+              FrontEnd`AttachCell[Typeset`box$, 
+               FrontEndResource["RGBColorValueSelector"], {
+               0, {Left, Bottom}}, {Left, Top}, 
+               "ClosingActions" -> {
+                "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+         DefaultBaseStyle->{},
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        RGBColor[0.8964705882352941, 0.7482352941176471, 0.5435294117647058],
+        Editable->False,
+        Selectable->False], ",", "\"\<\[FilledCircle]\>\"", ",", "markersize",
+        ",", "Null"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Polyhedral\>\"", ",", 
+       "\"\<estimateAnalyticCenter_updatePolyhedral_initializeEllipsoid_\
+questionMaxMin\>\"", ",", 
+       InterpretationBox[
+        ButtonBox[
+         TooltipBox[
+          GraphicsBox[{
+            {GrayLevel[0], RectangleBox[{0, 0}]}, 
+            {GrayLevel[0], RectangleBox[{1, -1}]}, 
+            {RGBColor[
+              Rational[28, 51], 0, 
+              Rational[143, 255]], RectangleBox[{0, -1}, {2, 1}]}},
+           AspectRatio->1,
+           Frame->True,
+           FrameStyle->RGBColor[0.3660130718954248, 0., 0.3738562091503268],
+           FrameTicks->None,
+           
+           ImageSize->
+            Dynamic[{
+             Automatic, 
+              1.35 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+               Magnification])}],
+           PlotRangePadding->None],
+          "RGBColor[28/51, 0, 143/255]"],
+         Appearance->None,
+         BaseStyle->{},
+         BaselinePosition->Baseline,
+         ButtonFunction:>With[{Typeset`box$ = EvaluationBox[]}, 
+           If[
+            Not[
+             AbsoluteCurrentValue["Deployed"]], 
+            SelectionMove[Typeset`box$, All, Expression]; 
+            FrontEnd`Private`$ColorSelectorInitialAlpha = 1; 
+            FrontEnd`Private`$ColorSelectorInitialColor = RGBColor[
+               Rational[28, 51], 0, 
+               Rational[143, 255]]; 
+            FrontEnd`Private`$ColorSelectorUseMakeBoxes = True; 
+            MathLink`CallFrontEnd[
+              FrontEnd`AttachCell[Typeset`box$, 
+               FrontEndResource["RGBColorValueSelector"], {
+               0, {Left, Bottom}}, {Left, Top}, 
+               "ClosingActions" -> {
+                "SelectionDeparture", "ParentChanged", "EvaluatorQuit"}]]]],
+         DefaultBaseStyle->{},
+         Evaluator->Automatic,
+         Method->"Preemptive"],
+        RGBColor[
+         Rational[28, 51], 0, 
+         Rational[143, 255]],
+        Editable->False,
+        Selectable->False], ",", "\"\<\[EmptyDiamond]\>\"", ",", "markersize",
+        ",", 
+       RowBox[{"Dashing", "[", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "Small", ",", "Small", ",", "Small"}], "}"}], 
+        "]"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"makebasecombs", "[", 
+    RowBox[{"basename_", ",", "estimator_"}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.25\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_betaDeffdim\>\""}], ",", 
+       "\"\<D-error\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_betascaleddistance\>\""}], ",", 
+       "\"\<Estimator Distance\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_hitratesample\>\""}], ",", 
+       "\"\<Hit Rate\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_marketsharehuber\>\""}], ",", 
+       "\"\<Marketshare Prediction Error\>\""}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"fourbase", "[", 
+    RowBox[{"basename_", ",", "estimator_"}], "]"}], ":=", 
+   RowBox[{"fourgraph", "[", 
+    RowBox[{"basemethods", ",", 
+     RowBox[{"makebasecombs", "[", 
+      RowBox[{"basename", ",", "estimator"}], "]"}], ",", 
+     RowBox[{"\"\<base\>\"", "<>", "basename"}], ",", "estimator"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"makemethodbasecombs", "[", 
+    RowBox[{"basename_", ",", "estimator_"}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.25\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_fisherDeffdim\>\""}], ",", 
+       "\"\<D-error\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_betascaleddistance\>\""}], ",", 
+       "\"\<Estimator Distance\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_hitratesample\>\""}], ",", 
+       "\"\<Hit Rate\>\""}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "basename", ",", "basemethods", ",", "\"\<0.35\>\"", ",", 
+       "ConfidencePlotAll", ",", 
+       RowBox[{"estimator", "<>", "\"\<_marketsharehuber\>\""}], ",", 
+       "\"\<Marketshare Prediction Error\>\""}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fourmethodbase", "[", 
+   RowBox[{"basename_", ",", "estimator_"}], "]"}], ":=", 
+  RowBox[{"fourgraph", "[", 
+   RowBox[{"basemethods", ",", 
+    RowBox[{"makemethodbasecombs", "[", 
+     RowBox[{"basename", ",", "estimator"}], "]"}], ",", 
+    RowBox[{"\"\<base\>\"", "<>", "basename"}], ",", "estimator"}], 
+   "]"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.718218074927313*^9, 3.7182180846687326`*^9}, {
+  3.718218124439653*^9, 3.718218146150474*^9}, {3.734374476206715*^9, 
+  3.734374491788041*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Outer", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"fourbase", "[", 
+     RowBox[{
+      RowBox[{"StringJoin", "[", 
+       RowBox[{"#1", ",", "#2"}], "]"}], ",", "#3"}], "]"}], "&"}], ",", 
+   RowBox[{"{", "\"\<12all0.5c2.0s\>\"", "}"}], ",", 
+   RowBox[{"{", "\"\<serial\>\"", "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\"\<STANB\>\"", ",", "\"\<HB\>\""}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7108773546406612`*^9, 3.71087736244175*^9}, 
+   3.710877453683345*^9, {3.718218273267585*^9, 3.718218288784082*^9}, 
+   3.7187410418865557`*^9, {3.7188327617780952`*^9, 3.7188327657526503`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"{", 
+    RowBox[{"\<\"/Volumes/jvielma/newTESTS/EMFACBCA/pdf/base12all0.5c2.\
+0sserialSTANB.pdf\"\>", 
+     ",", "\<\"/Volumes/jvielma/newTESTS/EMFACBCA/pdf/base12all0.5c2.\
+0sserialHB.pdf\"\>"}], "}"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.718218294209697*^9, 3.718741063284547*^9, 
+  3.7188327554985037`*^9, 3.718832839647306*^9, 3.7188339277053833`*^9, 
+  3.734374533996584*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Outer", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"fourmethodbase", "[", 
+     RowBox[{
+      RowBox[{"StringJoin", "[", 
+       RowBox[{"#1", ",", "#2"}], "]"}], ",", "#3"}], "]"}], "&"}], ",", 
+   RowBox[{"{", "\"\<12all0.5c2.0s\>\"", "}"}], ",", 
+   RowBox[{"{", "\"\<serial\>\"", "}"}], ",", 
+   RowBox[{"{", "\"\<Method\>\"", "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.71821816479827*^9, 3.718218192045394*^9}, 
+   3.718218269728279*^9, {3.718740482762033*^9, 3.718740499823165*^9}, 
+   3.718832770236261*^9, {3.718833146727358*^9, 3.718833149398302*^9}, 
+   3.71883392117714*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+   "{", "\<\"/Volumes/jvielma/newTESTS/EMFACBCA/pdf/base12all0.5c2.\
+0sserialMethod.pdf\"\>", "}"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.718218201993387*^9, 3.718740516494766*^9, 
+  3.718832558539309*^9, 3.718832672462391*^9, 3.7188328430927267`*^9, 
+  3.718833154643319*^9, 3.718833931351183*^9, 3.7343745396663*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1440, 855},
+WindowMargins->{{Automatic, 422}, {Automatic, 89}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (July 28, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 12524, 335, 495, "Input"],
+Cell[CellGroupData[{
+Cell[13107, 359, 120, 2, 65, "Chapter"],
+Cell[13230, 363, 12517, 323, 348, "Input"],
+Cell[CellGroupData[{
+Cell[25772, 690, 623, 14, 32, "Input"],
+Cell[26398, 706, 447, 10, 32, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26882, 721, 613, 14, 32, "Input"],
+Cell[27498, 737, 384, 8, 32, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

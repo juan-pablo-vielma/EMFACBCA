@@ -75,7 +75,8 @@ betaDeff2(varbetas,sigma) = Deff(varbetas,2,sigma)
 betaDeffdim(varbetas,sigma) = Deff(varbetas,size(sigma,1),sigma)
 
 hitrates(truebetas, estimatedbetas, questions) = [hitrate(truebetas[i], estimatedbetas[i], questions) for i in 1:length(truebetas)]
-
+hitratessample(truebetas, estimatedbetas, questions) = [hitratesample(truebetas[i], estimatedbetas[i], questions) for i in 1:length(truebetas)]
+hitratesformula(truebetas, estimatedbetas, questions) = [hitrateformula(truebetas[i], estimatedbetas[i], questions) for i in 1:length(truebetas)]
 
 function computemeasures(data,filename)
 	println("Evaluating Quality Measures")
@@ -93,7 +94,8 @@ function computemeasures(data,filename)
 			end
 		end
 	end
-	while length(hitratequestions) < 100
+	srand(123)
+	while length(hitratequestions) < 1000
 		x=rand(-1:1,nfeatures)
 		if norm(x)>0 && !in(x,allquestionsasked) && !in(x,hitratequestions) && !in(-x,allquestionsasked) && !in(-x,hitratequestions)
 			push!(hitratequestions,x)
@@ -112,7 +114,7 @@ function computemeasures(data,filename)
 
 
 
-			for measure in [betameanmeasures;betavarmeasures;"quality";"hitrate";"marketshare";"fisherDeffdim";"mfisherDeffdim";"BFisherdistance";"BMFisherdistance"]
+			for measure in [betameanmeasures;betavarmeasures;"quality";"hitrate";"hitratesample";"hitrateformula";"marketshare";"marketsharesample";"marketsharehuber";"marketshareformula";"fisherDeffdim";"mfisherDeffdim";"BFisherdistance";"BMFisherdistance"]
 				currentquality[string(measure)]=Array{Float64}[]
 			end
 			for i in 1:(nquestions+1)
@@ -127,7 +129,12 @@ function computemeasures(data,filename)
 				end
 				push!(currentquality["quality"],[quality])
 				push!(currentquality["hitrate"], hitrates(truebetas, meanbetas, hitratequestions))
+				push!(currentquality["hitratesample"], hitratessample(truebetas, meanbetas, hitratequestions))
+				push!(currentquality["hitrateformula"], hitratesformula(truebetas, meanbetas, hitratequestions))
 				push!(currentquality["marketshare"],marketshare(truebetas, meanbetas, hitratequestions))
+				push!(currentquality["marketsharesample"],marketsharesample(truebetas, meanbetas, hitratequestions))
+				push!(currentquality["marketsharehuber"],marketsharehuber(truebetas, meanbetas, hitratequestions))
+				push!(currentquality["marketshareformula"],marketshareformula(truebetas, meanbetas, hitratequestions))
 				push!(currentquality["fisherDeffdim"],Deff(currentestimates["fishermatrix"][i],size(sigma,1),sigma))
 				push!(currentquality["mfisherDeffdim"],Deff(currentestimates["mfishermatrix"][i],size(sigma,1),sigma))
 				push!(currentquality["BFisherdistance"],abs.(currentquality["fisherDeffdim"][end]-currentquality["betaDeffdim"][end]))
@@ -140,10 +147,11 @@ function computemeasures(data,filename)
 	fishertable = ("Fisher","estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_questionDEffPWLFisher_effDim")
 	expectedfishertable = ("Expected Fisher","estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_questionDEffPWLFisherQGK_effDim")
 	bayestable = ("Ellipsoidal","estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_questionDEffPWL_effDim")
-	savetables(filename,"results/tables/bayescovtables.txt",[bayestable, tablemethods...] )
-	savetables(filename,"results/tables/allellipsoid.txt",[fishertable, expectedfishertable, bayestable,("MaxMin","estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_questionMaxMin")])
-	savetablesother(filename,"results/tables/bayescovtablesupdate.txt",[bayestable, tablemethods...] )
-
+	savetables(filename,"results/tables/bayescovtables",[bayestable, tablemethods...] )
+	savetables(filename,"results/tables/allellipsoid",[fishertable, expectedfishertable, bayestable,("MaxMin","estimateEllipsoid_updateBayesApproximation_initializeEllipsoid_questionMaxMin")])
+	savetablesother(filename,"results/tables/bayescovtablesupdate",[bayestable, tablemethods...] )
+	savetablesHR(filename,"results/tables/hrtables",[bayestable, tablemethods...])
+	savetablesMS(filename,"results/tables/mstables",[bayestable, tablemethods...])
 
 	truemu = data["truemu"]
 	truebetas = data["truebetas"]
@@ -268,14 +276,123 @@ function savetablesother(filename,tablename,tablemethods)
 	close(file)
 end
 
-function savetables(filename,tablename,tablemethods,mfisher=false)
+function savetablesHR(filename,tablename,tablemethods)
 	file = open(tablename,"a")
 	println(file,filename)
 
 
 	allestimates = onlymethod ? ["Method"] : ["Method","STANB","HB"]
 	for estimator in allestimates
-		println(file,estimator)
+		println(file,estimator,"\\\\")
+		for method in tablemethods
+			print(file,method[1])
+			for question in [5,9,17]
+				significant = htestmin([-data[method[2]]["estimatorquality"][estimator]["hitrate"][question], [ -data[m[2]]["estimatorquality"][estimator]["hitrate"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["hitrate"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			for question in [5,9,17]
+				significant = htestmin([-data[method[2]]["estimatorquality"][estimator]["hitratesample"][question], [ -data[m[2]]["estimatorquality"][estimator]["hitratesample"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["hitratesample"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			for question in [5,9,17]
+				significant = htestmin([-data[method[2]]["estimatorquality"][estimator]["hitrateformula"][question], [ -data[m[2]]["estimatorquality"][estimator]["hitrateformula"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["hitrateformula"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			println(file,"\\\\")
+		end
+	end
+	close(file)
+end
+
+function savetablesMS(filename,tablename,tablemethods)
+	file = open(tablename,"a")
+	println(file,filename)
+
+
+	allestimates = onlymethod ? ["Method"] : ["Method","STANB","HB"]
+	for estimator in allestimates
+		println(file,estimator,"\\\\")
+		for method in tablemethods
+			print(file,method[1])
+			for question in [5,9,17]
+				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketshare"][question], [ data[m[2]]["estimatorquality"][estimator]["marketshare"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketshare"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			for question in [5,9,17]
+				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketsharesample"][question], [ data[m[2]]["estimatorquality"][estimator]["marketsharesample"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketsharesample"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			for question in [5,9,17]
+				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketsharehuber"][question], [ data[m[2]]["estimatorquality"][estimator]["marketsharehuber"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketsharehuber"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			for question in [5,9,17]
+				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketshareformula"][question], [ data[m[2]]["estimatorquality"][estimator]["marketshareformula"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				print(file,"&")
+				if significant
+					print(file,"\\tablehighlight{")
+				end
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketshareformula"][question])))
+				if  significant
+					print(file,"}")
+				end
+			end
+			println(file,"\\\\")
+		end
+	end
+	close(file)
+end
+
+function savetables(filename,tablename,tablemethods,mfisher=false)
+
+
+
+	allestimates = onlymethod ? ["Method"] : ["Method","STANB","HB"]
+	for estimator in allestimates
+		file = open(string(tablename,"_",estimator,".txt"),"a")
+		println(file,filename)
 		for method in tablemethods
 			print(file,method[1])
 			if estimator == "Method"
@@ -323,31 +440,31 @@ function savetables(filename,tablename,tablemethods,mfisher=false)
 				end
 			end
 			for question in [5,9,17]
-				significant = htestmin([-data[method[2]]["estimatorquality"][estimator]["hitrate"][question], [ -data[m[2]]["estimatorquality"][estimator]["hitrate"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				significant = htestmin([-data[method[2]]["estimatorquality"][estimator]["hitratesample"][question], [ -data[m[2]]["estimatorquality"][estimator]["hitratesample"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
 				print(file,"&")
 				if significant
 					print(file,"\\tablehighlight{")
 				end
-				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["hitrate"][question])))
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["hitratesample"][question])))
 				if  significant
 					print(file,"}")
 				end
 			end
 			for question in [5,9,17]
-				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketshare"][question], [ data[m[2]]["estimatorquality"][estimator]["marketshare"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
+				significant = htestmin([data[method[2]]["estimatorquality"][estimator]["marketsharehuber"][question], [ data[m[2]]["estimatorquality"][estimator]["marketsharehuber"][question] for m in setdiff(tablemethods,[method])]...]) # pval<= 0.05
 				print(file,"&")
 				if significant
 					print(file,"\\tablehighlight{")
 				end
-				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketshare"][question])))
+				print(file,@sprintf("%.2f",mean(data[method[2]]["estimatorquality"][estimator]["marketsharehuber"][question])))
 				if  significant
 					print(file,"}")
 				end
 			end
 			println(file,"\\\\")
 		end
+		close(file)
 	end
-	close(file)
 end
 
 
